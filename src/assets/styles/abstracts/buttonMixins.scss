@@ -1,0 +1,21 @@
+@use 'colors' as *;
+@use 'typographyMixins' as *;
+
+@mixin button {
+  @include buttonText();
+  width: 100%;
+  padding: 0.625rem 0;
+  text-align: center;
+  background-color: $ui-primary-green;
+  border-radius: 0.625rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: $ui-state-disabled;
+    color: $ui-primary-grey;
+    cursor: not-allowed;
+  }
+}
