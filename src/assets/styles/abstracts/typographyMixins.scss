@@ -1,0 +1,53 @@
+@use 'colors' as *;
+
+@mixin header {
+  font-size: 1.75rem;
+  line-height: 2.2rem;
+  font-weight: 600;
+}
+
+@mixin inputLabel {
+  font-size: 0.675rem;
+  line-height: 0.8125rem;
+  font-weight: 400;
+  color: $ui-secondary-black;
+}
+
+@mixin inputText {
+  font-size: 0.75rem;
+  line-height: 0.9375rem;
+  font-weight: 400;
+}
+
+@mixin buttonText {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  line-height: 0.9375rem;
+  font-weight: 600;
+  color: $ui-primary-white;
+}
+
+@mixin errorText {
+  font-size: 0.5rem;
+  line-height: 0.675rem;
+  font-weight: 400;
+  color: $ui-primary-red;
+}
+
+@mixin cardTitle {
+  font-size: 1.25rem;
+  line-height: 1.5625rem;
+  font-weight: 600;
+}
+
+@mixin cardDescription {
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+
+@mixin cardPrice {
+  font-size: 1.5rem;
+  line-height: 1.875rem;
+  font-weight: 600;
+}

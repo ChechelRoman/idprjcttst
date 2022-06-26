@@ -8,8 +8,10 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "vee-validate": "^4.5.11",
     "vue": "^3.2.37",
-    "vue-router": "^4.0.16"
+    "@vueuse/core": "^8.5.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
