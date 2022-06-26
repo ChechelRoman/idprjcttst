@@ -1,45 +1,64 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import AppForm from '../components/AppForm.vue';
 import ItemCard from '../components/ItemCard.vue';
+import AppPreloader from '../components/AppPreloader.vue';
 import FadeTransition from '../components/FadeTransition.vue';
 
 const items = ref(JSON.parse(localStorage.getItem('items')) || []);
 
-const addItem = async (itemData) => {
+const isDataLoaded = ref(false);
+
+onMounted(() => {
+  setTimeout(() => (isDataLoaded.value = true), 1500);
+});
+
+const addItem = (itemData) => {
   const formattedObject = { ...itemData };
   formattedObject.price = String(Number(formattedObject.price).toLocaleString('ru-RU'));
+  formattedObject.id = Date.now();
   items.value.push(formattedObject);
+  localStorage.setItem('items', JSON.stringify(items.value));
+};
+
+const deleteItem = (id) => {
+  items.value = items.value.filter((item) => item.id !== id);
   localStorage.setItem('items', JSON.stringify(items.value));
 };
 </script>
 
 <template>
-  <div class="container">
-    <header class="header">
-      <h1 class="heading">Добавление товара</h1>
-    </header>
-    <section class="content">
-      <section class="form_container">
-        <AppForm @submitData="addItem" />
-      </section>
-      <FadeTransition mode="out-in">
-        <section v-if="items.length > 0" class="items_container">
-          <transition-group name="list">
-            <ItemCard
-              v-for="(item, index) in items"
-              :key="index"
-              :url="item.url"
-              :title="item.title"
-              :description="item.description"
-              :price="item.price"
-            />
-          </transition-group>
+  <FadeTransition>
+    <div v-if="isDataLoaded" class="container">
+      <header class="header">
+        <h1 class="heading">Добавление товара</h1>
+      </header>
+
+      <section s class="content">
+        <section class="form_container">
+          <AppForm @submitData="addItem" />
         </section>
-        <p v-else class="empty_message">Список товаров пуст</p>
-      </FadeTransition>
-    </section>
-  </div>
+        <FadeTransition mode="out-in">
+          <section v-if="items.length > 0" class="items_container">
+            <transition-group name="list">
+              <ItemCard
+                v-for="item in items"
+                :key="item.id"
+                :url="item.url"
+                :title="item.title"
+                :description="item.description"
+                :price="item.price"
+                :id="item.id"
+                @deleteItem="deleteItem"
+              />
+            </transition-group>
+          </section>
+          <p v-else class="empty_message">Список товаров пуст</p>
+        </FadeTransition>
+      </section>
+    </div>
+    <AppPreloader v-else :size="'60px'" />
+  </FadeTransition>
 </template>
 
 <style lang="scss">
