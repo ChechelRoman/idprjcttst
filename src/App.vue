@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import MainView from './views/MainView.vue';
+</script>
 
 <template>
-  <div class="container"></div>
+  <MainView />
 </template>
 
 <style lang="scss">
