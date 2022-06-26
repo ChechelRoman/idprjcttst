@@ -7,24 +7,32 @@
   width: 100%;
   background-color: $ui-card-background;
   box-shadow: $ui-input-shadow;
-  padding: 0.625rem 1rem;
+  padding: 0.5625rem 1rem;
+  border: 1px solid transparent;
   border-radius: 0.25rem;
+  transition: all 200ms ease-in-out;
+
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    border-color: $ui-primary-green;
+  }
 
   &::placeholder {
     color: $ui-primary-grey !important;
   }
 }
 
-@mixin textArea {
+@mixin textarea {
   @include input();
-  height: 17.75rem;
+  height: 6.75rem;
   resize: none;
   font-family: 'Source Sans Pro', sans-serif;
-  border: none;
 
   &:hover,
   &:focus,
   &:focus-visible {
     outline: none;
+    border-color: $ui-primary-green;
   }
 }
