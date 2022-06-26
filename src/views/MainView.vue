@@ -1,5 +1,6 @@
 <script setup>
 import AppForm from '../components/AppForm.vue';
+import ItemCard from '../components/ItemCard.vue';
 </script>
 
 <template>
@@ -45,10 +46,16 @@ import AppForm from '../components/AppForm.vue';
     background-color: $ui-card-background;
     box-shadow: $ui-card-shadow;
     border-radius: 0.25rem;
+    align-self: flex-start;
   }
 
   .items_container {
     width: calc(100% - 21.75rem);
+    display: flex;
+    justify-content: space-between;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    flex-wrap: wrap;
   }
 }
 </style>
