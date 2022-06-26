@@ -4,26 +4,59 @@ import AppForm from '../components/AppForm.vue';
 import ItemCard from '../components/ItemCard.vue';
 import AppPreloader from '../components/AppPreloader.vue';
 import FadeTransition from '../components/FadeTransition.vue';
+import AppSelect from '../components/AppSelect.vue';
+import sortBy from 'lodash/sortBy';
 
 const items = ref(JSON.parse(localStorage.getItem('items')) || []);
 
+const filteredItems = ref([]);
+
 const isDataLoaded = ref(false);
 
+const activeFilter = ref('');
+
 onMounted(() => {
-  setTimeout(() => (isDataLoaded.value = true), 1500);
+  filteredItems.value = items.value;
+  setTimeout(() => (isDataLoaded.value = true), 150);
 });
 
 const addItem = (itemData) => {
   const formattedObject = { ...itemData };
-  formattedObject.price = String(Number(formattedObject.price).toLocaleString('ru-RU'));
+  formattedObject.price = Number(formattedObject.price);
   formattedObject.id = Date.now();
   items.value.push(formattedObject);
   localStorage.setItem('items', JSON.stringify(items.value));
+  filterItems(activeFilter.value);
 };
 
 const deleteItem = (id) => {
   items.value = items.value.filter((item) => item.id !== id);
   localStorage.setItem('items', JSON.stringify(items.value));
+  filterItems(activeFilter.value);
+};
+
+const selectOptions = [
+  { label: 'По убыванию цены', value: 'priceDown' },
+  { label: 'По возрастанию цены', value: 'priceUp' },
+  { label: 'По названию', value: 'title' },
+];
+
+const filterItems = (filter) => {
+  activeFilter.value = filter;
+  switch (filter) {
+    case '':
+      filteredItems.value = items.value;
+      break;
+    case 'priceDown':
+      filteredItems.value = sortBy(items.value, ['price']).reverse();
+      break;
+    case 'priceUp':
+      filteredItems.value = sortBy(items.value, ['price']);
+      break;
+    case 'title':
+      filteredItems.value = sortBy(items.value, ['title']);
+      break;
+  }
 };
 </script>
 
@@ -32,6 +65,7 @@ const deleteItem = (id) => {
     <div v-if="isDataLoaded" class="container">
       <header class="header">
         <h1 class="heading">Добавление товара</h1>
+        <AppSelect :options="selectOptions" @filter="filterItems" />
       </header>
 
       <section s class="content">
@@ -42,7 +76,7 @@ const deleteItem = (id) => {
           <section v-if="items.length > 0" class="items_container">
             <transition-group name="list">
               <ItemCard
-                v-for="item in items"
+                v-for="item in filteredItems"
                 :key="item.id"
                 :url="item.url"
                 :title="item.title"

@@ -1,0 +1,9 @@
+<script setup></script>
+
+<template>
+  <svg width="8" height="6" viewBox="0 0 8 6" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.48532 1.24264L4.24268 4.48528L1.00003 1.24264" />
+  </svg>
+</template>
+
+<style lang="scss" scoped></style>
