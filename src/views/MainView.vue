@@ -1,6 +1,17 @@
 <script setup>
+import { ref } from 'vue';
 import AppForm from '../components/AppForm.vue';
 import ItemCard from '../components/ItemCard.vue';
+import FadeTransition from '../components/FadeTransition.vue';
+
+const items = ref(JSON.parse(localStorage.getItem('items')) || []);
+
+const addItem = async (itemData) => {
+  const formattedObject = { ...itemData };
+  formattedObject.price = String(Number(formattedObject.price).toLocaleString('ru-RU'));
+  items.value.push(formattedObject);
+  localStorage.setItem('items', JSON.stringify(items.value));
+};
 </script>
 
 <template>
@@ -10,9 +21,23 @@ import ItemCard from '../components/ItemCard.vue';
     </header>
     <section class="content">
       <section class="form_container">
-        <AppForm />
+        <AppForm @submitData="addItem" />
       </section>
-      <section class="items_container"></section>
+      <FadeTransition mode="out-in">
+        <section v-if="items.length > 0" class="items_container">
+          <transition-group name="list">
+            <ItemCard
+              v-for="(item, index) in items"
+              :key="index"
+              :url="item.url"
+              :title="item.title"
+              :description="item.description"
+              :price="item.price"
+            />
+          </transition-group>
+        </section>
+        <p v-else class="empty_message">Список товаров пуст</p>
+      </FadeTransition>
     </section>
   </div>
 </template>
@@ -52,10 +77,34 @@ import ItemCard from '../components/ItemCard.vue';
   .items_container {
     width: calc(100% - 21.75rem);
     display: flex;
-    justify-content: space-between;
     column-gap: 1rem;
     row-gap: 1rem;
     flex-wrap: wrap;
+  }
+
+  .empty_message {
+    @include header();
+    align-self: center;
+    margin-inline: auto;
+  }
+}
+
+.list-enter-active {
+  animation: bounce-in 0.5s;
+}
+.list-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>

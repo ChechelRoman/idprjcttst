@@ -1,17 +1,18 @@
 <script setup>
 import AppInput from './AppInput.vue';
 import AppButton from './AppButton.vue';
+import FadeTransition from './FadeTransition.vue';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue';
 
-const emit = defineEmits(['sumbit']);
+const emit = defineEmits(['submitData']);
 
 const { handleSubmit, meta, resetForm } = useForm();
 
 const isDataSubmitted = ref(false);
 
 const onSubmit = handleSubmit((values) => {
-  emit('sumbit', values);
+  emit('submitData', values);
   isDataSubmitted.value = true;
   setTimeout(() => (isDataSubmitted.value = false), 2000);
   resetForm();
@@ -22,7 +23,7 @@ const onSubmit = handleSubmit((values) => {
   <form class="form" @submit="onSubmit">
     <div class="form_wrapper">
       <AppInput
-        id="name"
+        id="title"
         placeholder="Введите наименование товара"
         label="Наименование товара"
         :required="true"
@@ -39,9 +40,9 @@ const onSubmit = handleSubmit((values) => {
       <AppInput id="price" placeholder="Введите цену" label="Цена товара" :required="true" type="input" />
     </div>
     <AppButton type="submit" :disabled="!meta.valid">Добавить</AppButton>
-    <transition name="fade">
-      <p v-if="isDataSubmitted" class="success_message">Товар успешно добавлен</p>
-    </transition>
+    <FadeTransition>
+      <p class="success_message"><span v-if="isDataSubmitted">Товар успешно добавлен</span></p>
+    </FadeTransition>
   </form>
 </template>
 
@@ -57,18 +58,9 @@ const onSubmit = handleSubmit((values) => {
 
 .success_message {
   @include buttonText();
+  height: 1rem;
   margin-top: 0.5rem;
   text-align: center;
   color: $ui-primary-green;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 300ms ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

@@ -6,7 +6,7 @@ const props = defineProps(['url', 'title', 'description', 'price']);
   <div class="card">
     <img class="card__image" :src="`${props.url}`" alt="item image" />
     <h3 class="card__title">{{ props.title }}</h3>
-    <p class="card__description">{{ props.description }}</p>
+    <p class="card__description">{{ props.description ? props.description : 'Нет описания' }}</p>
     <p class="card__price">{{ props.price }} руб.</p>
   </div>
 </template>
@@ -35,12 +35,16 @@ const props = defineProps(['url', 'title', 'description', 'price']);
 
   &__description {
     @include cardDescription();
+    min-width: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
 
   &__price {
     @include cardPrice();
+    margin-top: auto;
     padding: 0 1rem;
     padding-bottom: 1.5rem;
   }
